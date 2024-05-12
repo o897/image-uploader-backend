@@ -12,25 +12,11 @@ const storage = multer.diskStorage({
         cb(null,'public');
     },
     filename: (req, file, cb) => {
-        console.log("multer : ", file.originalname);
         cb(null, file.originalname);
     },
 });
 
 const upload = multer({storage})
-
-// const upload = multer({
-//     dest: 'public/',
-//     filename: (req, file, cb) => {
-//         console.log("multer : ", file.originalname)
-//         cb(null, file.originalname);
-//     },
-// });
-
-// app.use(cors({
-//     origin: 'http://localhost:3000'
-// }))
-
 
 mongoose.connect(process.env["MONGO_URL"], {
     useNewUrlParser : true,
@@ -38,7 +24,7 @@ mongoose.connect(process.env["MONGO_URL"], {
 })
 .then(() => console.log("Connected to the DB"))
 .catch((err) => console.log(err))
-// yW5PuLo9RXod6jKg
+
 const Schema = mongoose.Schema;
 
 // // Define our Schema
@@ -52,7 +38,7 @@ const ImageModel = mongoose.model("image",ImageSchema)
 app.use(cors())
 
 app.get('/', (req,res) => {
-    res.send({ message : "server running with an Usain speed"})
+    res.send({ message : "server running."})
 })
 
 
