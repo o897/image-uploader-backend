@@ -47,7 +47,7 @@ app.post('/upload',upload.single('file'), (req,res) => {
     // newImage.save()
 
     const filePath = path.join(__dirname, file.path)
-
+    console.log(upload);
     res.json({message : 'Image uploaded successfully'})
 })
 
