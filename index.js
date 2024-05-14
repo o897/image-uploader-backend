@@ -3,21 +3,21 @@ const express = require('express')
 const cors = require('cors')
 const path = require('path')
 const app = express()
-// const mongoose = require('./config/mongoose')
+const mongoose = require('./config/mongoose')
 const upload = require('./middleware/multer')
 const cloudinary = require('./utils/cloudinary')
 
 app.use(express.static('public'))
 
-// const Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-// // Define our Schema
-// const ImageSchema = new Schema({
-//     filename : String
-// })
+// Define our Schema
+const ImageSchema = new Schema({
+    filename : String
+})
 
 // // Collection name
-// const ImageModel = mongoose.model("image",ImageSchema)
+const ImageModel = mongoose.model("image",ImageSchema)
 
 app.use(cors())
 
