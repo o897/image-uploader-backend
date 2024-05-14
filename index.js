@@ -43,12 +43,11 @@ app.post('/upload',upload.single('file'), (req,res) => {
 
     // mongoose
     // const newImage = new ImageModel({filename : file.originalname})
-
     // newImage.save()
 
     const filePath = path.join(__dirname, file.path)
-    console.log(upload);
-    res.json({message : 'Image uploaded successfully'})
+    console.log(uploadResult);
+    res.json({message : 'Image uploaded successfully',uploadResult})
 })
 
 app.listen(3004, () => console.log('listening on port 3000'))
