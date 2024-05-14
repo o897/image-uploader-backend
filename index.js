@@ -35,7 +35,7 @@ app.get('/api/upload/:filename', (req,res) => {
 app.post('/upload',upload.single('file'), (req,res) => {
     const date = new Date().getTime();
     const file = req.file;
-    const uploadResult = cloudinary.uploader.upload(req.file.path,{public_id : file.originalname+date}).catch((error)=>{console.log(error)})
+    const uploadResult = cloudinary.uploader.upload(req.file.path,{public_id : file.originalname+'-'+date}).catch((error)=>{console.log(error)})
 
     if(!file) {
         return res.status(400).json({error : 'No file uploaded'})
@@ -47,7 +47,6 @@ app.post('/upload',upload.single('file'), (req,res) => {
     // newImage.save()
 
     const filePath = path.join(__dirname, file.path)
-    console.log(file.originalname+date)
 
     res.json({message : 'Image uploaded successfully'})
 })
