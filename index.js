@@ -1,29 +1,13 @@
+require('dotenv').config()
 const express = require('express')
-const multer = require('multer')
 const cors = require('cors')
 const path = require('path')
 const app = express()
-const mongoose = require('mongoose')
-require('dotenv').config()
+const mongoose = require('./config/mongoose')
+const upload = require('./middleware/multer')
+const cloudinary = require('./utils/cloudinary')
 
 app.use(express.static('public'))
-const storage = multer.diskStorage({
-    destination : (req,file,cb) => {
-        cb(null,'public');
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);
-    },
-});
-
-const upload = multer({storage})
-
-mongoose.connect(process.env["MONGO_URL"], {
-    useNewUrlParser : true,
-    useUnifiedTopology : true,
-})
-.then(() => console.log("Connected to the DB"))
-.catch((err) => console.log(err))
 
 const Schema = mongoose.Schema;
 
@@ -44,13 +28,14 @@ app.get('/', (req,res) => {
 
 app.get('/api/upload/:filename', (req,res) => {
 
-    const filePath = __dirname + '/public/' + req.params.filename; // relative path
-    res.sendFile(filePath); // specify root directory
+    const filePath = __dirname + '/public/' + req.params.filename; // 
+    res.sendFile(filePath); 
 
 })
-app.post('/upload',upload.single('file'),(req,res) => {
-
+app.post('/upload',upload.single('file'), (req,res) => {
+    const date = new Date().getTime();
     const file = req.file;
+    const uploadResult = cloudinary.uploader.upload(req.file.path,{public_id : file.originalname+date}).catch((error)=>{console.log(error)})
 
     if(!file) {
         return res.status(400).json({error : 'No file uploaded'})
@@ -62,8 +47,9 @@ app.post('/upload',upload.single('file'),(req,res) => {
     // newImage.save()
 
     const filePath = path.join(__dirname, file.path)
-    // console.log(file.originalname)
-    res.json({message : 'Image uploaded successfully' , filePath})
+    console.log(file.originalname+date)
+
+    res.json({message : 'Image uploaded successfully'})
 })
 
-app.listen(3003, () => console.log('listening on port 3000'))
+app.listen(3004, () => console.log('listening on port 3000'))
