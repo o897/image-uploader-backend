@@ -3,21 +3,21 @@ const express = require('express')
 const cors = require('cors')
 const path = require('path')
 const app = express()
-const mongoose = require('./config/mongoose')
+// const mongoose = require('./config/mongoose')
 const upload = require('./middleware/multer')
 const cloudinary = require('./utils/cloudinary')
 
 app.use(express.static('public'))
 
-const Schema = mongoose.Schema;
+// const Schema = mongoose.Schema;
 
 // // Define our Schema
-const ImageSchema = new Schema({
-    filename : String
-})
+// const ImageSchema = new Schema({
+//     filename : String
+// })
 
 // // Collection name
-const ImageModel = mongoose.model("image",ImageSchema)
+// const ImageModel = mongoose.model("image",ImageSchema)
 
 app.use(cors())
 
@@ -35,7 +35,7 @@ app.get('/api/upload/:filename', (req,res) => {
 app.post('/upload',upload.single('file'), (req,res) => {
     const date = new Date().getTime();
     const file = req.file;
-    const uploadResult = cloudinary.uploader.upload(req.file.path,{public_id : file.originalname+'-'+date}).catch((error)=>{console.log(error)})
+    const uploadResult = cloudinary.uploader.upload(req.file.path,{public_id : file.originalname}).catch((error)=>{console.log(error)})
 
     if(!file) {
         return res.status(400).json({error : 'No file uploaded'})
