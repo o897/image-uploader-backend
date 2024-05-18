@@ -7,7 +7,7 @@ const mongoose = require("./config/mongoose");
 const fileUpload = require("./middleware/multer");
 const cloudinary = require("./utils/cloudinary");
 const streamifier = require("streamifier");
-
+app.use(cors());
 app.use(express.static("public"));
 
 const Schema = mongoose.Schema;
@@ -20,8 +20,6 @@ const ImageSchema = new Schema({
 
 // // Collection name
 const ImageModel = mongoose.model("image", ImageSchema);
-
-app.use(cors());
 
 app.get("/", (req, res) => {
   res.send({ message: "server running." });
