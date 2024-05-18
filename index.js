@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const app = express();
-const mongoose = require('./config/mongoose')
+const mongoose = require("./config/mongoose");
 const fileUpload = require("./middleware/multer");
 const cloudinary = require("./utils/cloudinary");
 const streamifier = require("streamifier");
@@ -14,12 +14,12 @@ const Schema = mongoose.Schema;
 
 // Define our Schema
 const ImageSchema = new Schema({
-    url : String,
-    filename : String
-})
+  url: String,
+  filename: String,
+});
 
 // // Collection name
-const ImageModel = mongoose.model("image",ImageSchema)
+const ImageModel = mongoose.model("image", ImageSchema);
 
 app.use(cors());
 
@@ -39,21 +39,21 @@ app.get("/api/upload/:filename", (req, res) => {
 //     res.json({message : 'Image uploaded successfully',uploadResult})
 // })
 
-app.get('/api/:image', async (req,res) => {
-
-    console.log(req.params.image);
-    const findImage = await ImageModel.findOne({filename : req.param.image})
-    
-    const results = findImage ? res.json(findImage) : res.send("Image not found.")
-
-
-})
+app.get("/api/:image", async (req, res) => {
+  const findImage = await ImageModel.findOne({ filename : req.params.image });
+  const results = findImage
+    ? res.json(findImage)
+    : res.send("Image not found.");
+});
 
 app.post("/upload", fileUpload.single("file"), (req, res) => {
+  const fileName = req.file.originalname;
+  
   let streamUpload = (req) => {
     return new Promise((resolve, reject) => {
       let stream = cloudinary.uploader.upload_stream((error, result) => {
         if (result) {
+          // console.log("stream : ",result);
           resolve(result);
         } else {
           reject(error);
@@ -66,19 +66,19 @@ app.post("/upload", fileUpload.single("file"), (req, res) => {
 
   async function upload(req) {
     let result = await streamUpload(req);
-    console.log(result);
+    // console.log("result : ", result);
     
-    let {public_id,secure_url} = result
+    let {secure_url} = result;
 
      // mongoose
-     const newImage = new ImageModel({url : secure_url, filename : public_id})
-     newImage.save()
+     const newImage = new ImageModel({url : secure_url, filename : fileName});
+     newImage.save();
 
-
-    console.log("url image : ",secure_url)
+     console.log(newImage);
   }
 
   upload(req);
 });
+
 
 app.listen(3004, () => console.log("listening on port 3000"));
