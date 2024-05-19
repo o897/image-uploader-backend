@@ -3,13 +3,36 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const app = express();
-const mongoose = require("./config/mongoose");
 const fileUpload = require("./middleware/multer");
 const cloudinary = require("./utils/cloudinary");
 const streamifier = require("streamifier");
 app.use(cors());
+
 app.use(express.static("public"));
 
+// Set middleware of CORS 
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://your-frontend.com"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Private-Network", true);
+  //  Firefox caps this at 24 hours (86400 seconds). Chromium (starting in v76) caps at 2 hours (7200 seconds). The default value is 5 seconds.
+  res.setHeader("Access-Control-Max-Age", 7200);
+
+  next();
+});
+
+const mongoose = require("./config/mongoose");
 const Schema = mongoose.Schema;
 
 // Define our Schema
@@ -30,12 +53,7 @@ app.get("/api/upload/:filename", (req, res) => {
   res.sendFile(filePath);
 });
 
-// app.post('/upload',upload.single('file'), (req,res) => {
-//     const uploadResult = cloudinary.uploader.upload(req.file.path ,{public_id : file.originalname}).catch((error)=>{console.log(error)})
-//     const filePath = path.join(__dirname, file.path)
-//     console.log(uploadResult);
-//     res.json({message : 'Image uploaded successfully',uploadResult})
-// })
+
 
 app.get("/api/:image", async (req, res) => {
   const findImage = await ImageModel.findOne({ filename : req.params.image });
@@ -64,7 +82,7 @@ app.post("/upload", fileUpload.single("file"), (req, res) => {
 
   async function upload(req) {
     let result = await streamUpload(req);
-    // console.log("result : ", result);
+    console.log("result : ", result);
     
     let {secure_url} = result;
 
