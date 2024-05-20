@@ -3,13 +3,15 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const app = express();
-const mongoose = require("./config/mongoose");
 const fileUpload = require("./middleware/multer");
 const cloudinary = require("./utils/cloudinary");
 const streamifier = require("streamifier");
 
+app.use(cors());
+
 app.use(express.static("public"));
 
+const mongoose = require("./config/mongoose");
 const Schema = mongoose.Schema;
 
 // Define our Schema
@@ -21,22 +23,14 @@ const ImageSchema = new Schema({
 // // Collection name
 const ImageModel = mongoose.model("image", ImageSchema);
 
-
-app.use(cors({
-  origin: 'https://image-uploader-frontend-agg6.onrender.com/'
-}));
-
-// app.use(cors());
-
 app.get("/", (req, res) => {
-  res.send({ message: "server running." });
+  res.send({ message: "server running on  render." });
 });
 
 app.get("/api/upload/:filename", (req, res) => {
   const filePath = __dirname + "/public/" + req.params.filename; //
   res.sendFile(filePath);
 });
-
 
 app.get("/api/:image", async (req, res) => {
   const findImage = await ImageModel.findOne({ filename : req.params.image });
@@ -75,9 +69,7 @@ app.post("/upload", fileUpload.single("file"), (req, res) => {
 
      console.log(newImage);
   }
-
   upload(req);
 });
-
 
 app.listen(3004, () => console.log("listening on port 3000"));
