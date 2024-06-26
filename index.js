@@ -36,9 +36,9 @@ app.get("/api/upload/:filename", (req, res) => {
   res.sendFile(filePath);
 });
 
-// remove async, already doing that on the frontend
-app.get("/api/:image", (req, res) => {
-  const findImage = ImageModel.findOne({ filename : req.params.image });
+
+app.get("/api/:image", async (req, res) => {
+  const findImage = await ImageModel.findOne({ filename : req.params.image });
   const results = findImage
     ? res.json(findImage)
     : res.send("Image not found.");
