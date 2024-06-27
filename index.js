@@ -13,13 +13,16 @@ app.use(express.static("public"));
 
 const Schema = mongoose.Schema;
 
+const date = new Date('UTC+2'); // Set timezone to UTC+2 (South African time)
+const createdAt = date.toISOString();
+
 // Define our Schema
 const ImageSchema = new Schema({
   url: String,
   filename: String,
   createdAt : {
     type : Date,
-    default: Date.now
+    default: createdAt
   }
 });
 
