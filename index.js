@@ -7,6 +7,7 @@ const mongoose = require("./config/mongoose");
 const fileUpload = require("./middleware/multer");
 const cloudinary = require("./utils/cloudinary");
 const streamifier = require("streamifier");
+const { Console } = require("console");
 
 app.use(express.static("public"));
 
@@ -16,10 +17,15 @@ const Schema = mongoose.Schema;
 const ImageSchema = new Schema({
   url: String,
   filename: String,
+  createdAt : {
+    type : Date,
+    default: Date.now
+  }
 });
 
 // // Collection name
 const ImageModel = mongoose.model("image", ImageSchema);
+
 
 app.use(cors({
   origin: 'https://image-uploader-frontend-agg6.onrender.com'
@@ -41,7 +47,7 @@ app.get("/api/:image", async (req, res) => {
   const findImage = await ImageModel.findOne({ filename : req.params.image });
   const results = findImage
     ? res.json(findImage)
-    : res.send("Image not found.");
+    : res.json({error : "Image not found"});
 });
 
 app.post("/upload", fileUpload.single("file"), (req, res) => {
@@ -62,20 +68,24 @@ app.post("/upload", fileUpload.single("file"), (req, res) => {
     });
   };
 
+  const currentTime = new Date();
+  const timeString = currentTime.toLocaleTimeString();
+  
   async function upload(req) {
     let result = await streamUpload(req);
-    console.log("result : ", result);
-    
+    // console.log("result : ", result);    
     let {secure_url} = result;
-
      // mongoose
      const newImage = new ImageModel({url : secure_url, filename : fileName});
      newImage.save();
-
-     console.log(newImage);
+    //  console.log(newImage);
+    
   }
-
   upload(req);
+  console.log(timeString);
+  
+
+  // how about i return 
 });
 
 
