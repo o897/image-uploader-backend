@@ -59,13 +59,11 @@ app.post("/upload", fileUpload.single("file"), (req, res) => {
     return new Promise((resolve, reject) => {
       let stream = cloudinary.uploader.upload_stream((error, result) => {
         if (result) {
-          // console.log("stream : ",result);
           resolve(result);
         } else {
           reject(error);
         }
       });
-
       streamifier.createReadStream(req.file.buffer).pipe(stream);
     });
   };
@@ -77,11 +75,9 @@ app.post("/upload", fileUpload.single("file"), (req, res) => {
     let result = await streamUpload(req);
     // console.log("result : ", result);    
     let {secure_url} = result;
-     // mongoose
      const newImage = new ImageModel({url : secure_url, filename : fileName});
      newImage.save();
     //  console.log(newImage);
-    
   }
   upload(req);
   console.log(timeString);
