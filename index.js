@@ -44,7 +44,6 @@ app.get("/api/upload/:filename", (req, res) => {
   res.sendFile(filePath);
 });
 
-
 app.get("/api/:image", async (req, res) => {
   const findImage = await ImageModel.findOne({ filename : req.params.image });
   const results = findImage
