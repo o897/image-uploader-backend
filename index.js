@@ -26,7 +26,7 @@ const ImageSchema = new Schema({
   }
 });
 
-// // Collection name
+// Collection name
 const ImageModel = mongoose.model("image", ImageSchema);
 
 app.use(cors({
