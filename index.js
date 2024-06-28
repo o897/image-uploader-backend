@@ -36,7 +36,7 @@ app.use(cors({
 
 
 app.get("/", (req, res) => {
-  res.send({ message: "server running." });
+  res.send({ message: "server running" });
 });
 
 app.get("/api/upload/:filename", (req, res) => {
