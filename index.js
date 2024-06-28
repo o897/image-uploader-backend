@@ -80,10 +80,7 @@ app.post("/upload", fileUpload.single("file"), (req, res) => {
     //  console.log(newImage);
   }
   upload(req);
-  console.log(timeString);
   
-
-  // how about i return 
 });
 
 
