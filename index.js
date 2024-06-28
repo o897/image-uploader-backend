@@ -29,11 +29,11 @@ const ImageSchema = new Schema({
 // Collection name
 const ImageModel = mongoose.model("image", ImageSchema);
 
+// app.use(cors());
 app.use(cors({
   origin: 'https://image-uploader-frontend-agg6.onrender.com'
 }));
 
-// app.use(cors());
 
 app.get("/", (req, res) => {
   res.send({ message: "server running." });
