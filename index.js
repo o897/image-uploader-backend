@@ -31,10 +31,27 @@ const ImageModel = mongoose.model("image", ImageSchema);
 // app.use(cors());
 // origin : "https://darling-ganache-c749ed.netlify.app",
 
+const allowedOrigins = [
+  "https://image-uploader-frontend-agg6.onrender.com",
+  "https://darling-ganache-c749ed.netlify.app"
+];
+
 app.use(cors({
-  origin: "https://image-uploader-frontend-agg6.onrender.com",
-  optionsSuccessStatus : 200
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  optionsSuccessStatus: 200
 }));
+
+
+// app.use(cors({
+//   origin: "https://image-uploader-frontend-agg6.onrender.com",
+//   optionsSuccessStatus : 200
+// }));
 
 
 app.get("/", (req, res) => {
