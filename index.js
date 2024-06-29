@@ -30,7 +30,7 @@ const ImageModel = mongoose.model("image", ImageSchema);
 
 // app.use(cors());
 app.use(cors({
-  origin: "https://image-uploader-frontend-agg6.onrender.com*",
+  origin: "https://image-uploader-frontend-agg6.onrender.com",
   optionsSuccessStatus : 200
 }));
 
