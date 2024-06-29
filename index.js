@@ -32,6 +32,7 @@ const ImageModel = mongoose.model("image", ImageSchema);
 // origin : "https://darling-ganache-c749ed.netlify.app",
 
 const allowedOrigins = [
+  "https://inquisitive-chimera-40f663.netlify.app",
   "https://image-uploader-frontend-agg6.onrender.com",
   "https://darling-ganache-c749ed.netlify.app"
 ];
