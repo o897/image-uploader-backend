@@ -32,7 +32,7 @@ const ImageModel = mongoose.model("image", ImageSchema);
 // origin: "https://image-uploader-frontend-agg6.onrender.com",
 
 app.use(cors({
-  origin : "https://66806d1df102c177d4c4e011--darling-ganache-c749ed.netlify.app",
+  origin : "https://darling-ganache-c749ed.netlify.app",
   optionsSuccessStatus : 200
 }));
 
