@@ -29,8 +29,10 @@ const ImageSchema = new Schema({
 const ImageModel = mongoose.model("image", ImageSchema);
 
 // app.use(cors());
+// origin: "https://image-uploader-frontend-agg6.onrender.com",
+
 app.use(cors({
-  origin: "https://image-uploader-frontend-agg6.onrender.com",
+  origin : "https://66806d1df102c177d4c4e011--darling-ganache-c749ed.netlify.app",
   optionsSuccessStatus : 200
 }));
 
