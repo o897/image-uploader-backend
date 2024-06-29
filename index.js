@@ -7,7 +7,6 @@ const mongoose = require("./config/mongoose");
 const fileUpload = require("./middleware/multer");
 const cloudinary = require("./utils/cloudinary");
 const streamifier = require("streamifier");
-const { Console } = require("console");
 
 app.use(express.static("public"));
 
@@ -31,7 +30,7 @@ const ImageModel = mongoose.model("image", ImageSchema);
 
 // app.use(cors());
 app.use(cors({
-  origin: 'https://image-uploader-frontend-agg6.onrender.com'
+  origin: "https://image-uploader-frontend-agg6.onrender.com"
 }));
 
 
@@ -72,7 +71,8 @@ app.post("/upload", fileUpload.single("file"), (req, res) => {
   
   async function upload(req) {
     let result = await streamUpload(req);
-    // console.log("result : ", result);    
+    // the results of how our upload went, and if its ready 
+
     let {secure_url} = result;
      const newImage = new ImageModel({url : secure_url, filename : fileName});
      newImage.save();
