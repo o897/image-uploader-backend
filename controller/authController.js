@@ -34,8 +34,7 @@ const bcrypt = require("bcryptjs");
 exports.registerUser = (req, res) => {
     // Get the data from the request body
     const { firstName, lastName, email, password } = req.body;
-
-    // ---===[ THIS IS THE CRITICAL FIX ]===---
+    
     // Use .trim() to remove any leading/trailing whitespace or newlines from the email.
     const trimmedEmail = email.trim();
 

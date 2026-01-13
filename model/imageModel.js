@@ -8,7 +8,7 @@ const ImageSchema = new mongoose.Schema(
     {
         url: String,
         filename: String,
-        userId : String,
+        userId : String, 
         imageTitle : String,
         imageDescription : String,
         createdAt: {
