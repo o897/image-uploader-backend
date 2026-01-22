@@ -17,8 +17,7 @@ passport.deserializeUser((id, done) => {
     });
 });
 
-
-
+console.log("Attempting to register Google Strategy...");
 passport.use(
     new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
@@ -50,6 +49,8 @@ passport.use(
         }
     )
 );
+console.log("Google Strategy registered successfully!");
+
 
 passport.use(
     new LocalStrategy({
