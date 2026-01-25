@@ -1,8 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy; // 1. Import LocalStrategy
-const bcrypt = require('bcryptjs'); // Import bcrypt
-
+const bcrypt = require('bcryptjs'); 
 const User = require("../model/userModel");
 require('dotenv').config();
 
@@ -17,7 +16,11 @@ passport.deserializeUser((id, done) => {
     });
 });
 
+<<<<<<< HEAD
 console.log("Attempting to register Google Strategy...");
+=======
+
+>>>>>>> df9a0b3 (oauth works bug was allowed ports)
 passport.use(
     new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
@@ -81,18 +84,5 @@ passport.use(
             })
 );
 
-passport.use(new FacebookStrategy({
-    clientID: FACEBOOK_APPID,
-    clientSecret: FACEBOOK_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/callback",
-    profileFields : ['id','displayName','photos','email'],
-    enableProof: true
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
-  }
-));
 
 

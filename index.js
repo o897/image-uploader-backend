@@ -4,9 +4,11 @@ const cors = require("cors");
 const path = require("path");
 const app = express();
 const session = require('express-session');
-const mongoose = require("./config/mongoose");
 const passport = require("passport");
 const web = require("./routes/web")
+// 1. Load config/Strategy
+require('./config/passport'); 
+
 
 const allowedOrigins = [
   "https://inquisitive-chimera-40f663.netlify.app",
@@ -44,7 +46,5 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-
 app.use('/',web)
-app.listen(3004, () => console.log("listening on port 3004"));
+app.listen(3000, () => console.log("listening on port 3000"));

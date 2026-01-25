@@ -79,6 +79,8 @@ exports.loginUser = async (req,res) => {
     // request the email and the password from the body    
     const {email, password} = req.body
 
+    console.log(email);
+    
     try {
     // find the records on the db
     const user = await User.findOne({email,password});
