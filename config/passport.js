@@ -1,88 +1,79 @@
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const LocalStrategy = require('passport-local').Strategy; // 1. Import LocalStrategy
-const bcrypt = require('bcryptjs'); 
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const LocalStrategy = require("passport-local").Strategy; // 1. Import LocalStrategy
+const bcrypt = require("bcryptjs");
 const User = require("../model/userModel");
-require('dotenv').config();
+require("dotenv").config();
 
 // save user id to the session
 passport.serializeUser((user, done) => {
-    done(null, user.id); /* user.id from mongoDb */
+  done(null, user.id); /* user.id from mongoDb */
 });
 
 passport.deserializeUser((id, done) => {
-    User.findById(id).then((user) => {
-        done(null, user);
-    });
+  User.findById(id).then((user) => {
+    done(null, user);
+  });
 });
 
-<<<<<<< HEAD
-console.log("Attempting to register Google Strategy...");
-=======
-
->>>>>>> df9a0b3 (oauth works bug was allowed ports)
 passport.use(
-    new GoogleStrategy({
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: '/auth/google/callback'
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "/auth/google/callback",
     },
-        (accessToken, refreshToken, profile, done) => {
-            User.findOne({ email: profile.emails[0].value }).then((currentUser) => {
-                if (currentUser) {
-                    // user exists
-                    console.log(`user is : ${currentUser}`);
-                    done(null, currentUser);
-
-                } else {
-                    // user does not exists
-                    new User({
-                        googleId: profile.id,
-                        firstName: profile.name.givenName,
-                        lastName: profile.name.familyName,
-                        email: profile.emails[0].value
-                    }).save().then((newUser) => {
-                        console.log(`new user created : ${newUser}`);
-                        done(null, newUser);
-
-                    });
-                }
-            })
-
+    (accessToken, refreshToken, profile, done) => {
+      User.findOne({ email: profile.emails[0].value }).then((currentUser) => {
+        if (currentUser) {
+          // user exists
+          console.log(`user is : ${currentUser}`);
+          done(null, currentUser);
+        } else {
+          // user does not exists
+          new User({
+            googleId: profile.id,
+            firstName: profile.name.givenName,
+            lastName: profile.name.familyName,
+            email: profile.emails[0].value,
+          })
+            .save()
+            .then((newUser) => {
+              console.log(`new user created : ${newUser}`);
+              done(null, newUser);
+            });
         }
-    )
+      });
+    }
+  )
 );
 console.log("Google Strategy registered successfully!");
 
-
 passport.use(
-    new LocalStrategy({
-        usernameField: 'email'
+  new LocalStrategy(
+    {
+      usernameField: "email",
     },
-        (email, password, done) => {
-            User.findOne({ email: email })
-                .then(user => {
-                    if (!user) {
-                        return done(null, false, { message: 'Incorrect email.' });
-                    }
+    (email, password, done) => {
+      User.findOne({ email: email })
+        .then((user) => {
+          if (!user) {
+            return done(null, false, { message: "Incorrect email." });
+          }
 
+          // if verifyPassword is synchronous
+          bcrypt.compare(password, user.password, (err, isMatch) => {
+            if (err) throw err;
 
-                    // if verifyPassword is synchronous
-                    bcrypt.compare(password, user.password, (err,isMatch) => {
-                        if (err) throw err;
-
-                        if (isMatch) {
-                            console.log("user logged in.");
-                            return done(null,user);
-                            
-                        } else {
-                            return done(null, false, { message : "Password not match"})
-                        }
-                    });
-                })
-                .catch(err => done(err))
-            })
+            if (isMatch) {
+              console.log("user logged in.");
+              return done(null, user);
+            } else {
+              return done(null, false, { message: "Password not match" });
+            }
+          });
+        })
+        .catch((err) => done(err));
+    }
+  )
 );
-
-
-
