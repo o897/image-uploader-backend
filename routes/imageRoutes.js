@@ -11,7 +11,6 @@ router.get("/test", async (req, res) => {
     res.json({error : "Image not found"});
 });
 
-
 router.get("/api/upload/:filename", (req, res) => {
   const filePath = __dirname + "/public/" + req.params.filename; //
   res.sendFile(filePath);
