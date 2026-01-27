@@ -16,13 +16,15 @@ passport.deserializeUser((id, done) => {
   });
 });
 
+
+ // callbackURL: "/auth/google/callback",
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      // callbackURL: "/auth/google/callback",
-      callbackURL: "https://image-uploader-backend-yzqj.onrender.com/auth/google/callback"
+      callbackURL: "https://image-uploader-backend-yzqj.onrender.com/auth/google/callback",
+      proxy: true ,
     },
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ email: profile.emails[0].value }).then((currentUser) => {
