@@ -8,8 +8,6 @@ const User = require('../model/userModel');
 // login users and registering users
 // router.post('/',authController.loginUser);
 
-
-
 router.get("/hey", (req, res) => {
     res.send("hey")
 })
@@ -45,6 +43,7 @@ router.get("/success", (req, res) => {
             console.log("user does not exist", err);
         }
 
+        console.log("user logged in");
         // res.json({message : "logged in"})
         // res.redirect(process.env.HOME_URL);
 
