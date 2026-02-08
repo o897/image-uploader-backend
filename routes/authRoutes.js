@@ -6,11 +6,6 @@ const authController = require("../controller/authController")
 const User = require('../model/userModel');
 
 // login users and registering users
-// router.post('/',authController.loginUser);
-
-router.get("/hey", (req, res) => {
-    res.send("hey")
-})
 
 router.get("/success", (req, res) => {
     if (req.user) { //request the user object
@@ -26,28 +21,7 @@ router.get("/success", (req, res) => {
     }
 }),
 
-    router.post("/creds", async (req, res) => {
-
-        // request the email and the password from the body    
-        const { email, password } = req.body
-
-        // return res.status(200).json({
-        //     debug: true,
-        //     body: req.body,
-        // });
-
-        try {
-            // find the records on the db
-            const user = await User.findOne({ email, password });
-        } catch (err) {
-            console.log("user does not exist", err);
-        }
-
-        console.log("user logged in");
-        // res.json({message : "logged in"})
-        // res.redirect(process.env.HOME_URL);
-
-    })
+router.post("/creds", authController.registerUser);
 
 router.get("/failed", (req, res) => {
     res.status(401).json({
@@ -84,6 +58,7 @@ router.post('/login', (req, res, next) => {
         if (err) return next(err);
         if (!user) return res.status(401).json({ success: false, message: info.message });
 
+        // uses passport to store user in the session
         req.login(user, (err) => {
             if (err) return next(err);
             console.log(user);

@@ -14,22 +14,20 @@ const allowedOrigins = [
   "https://image-uploader-frontend-agg6.onrender.com",
   "https://darling-ganache-c749ed.netlify.app",
   "http://localhost:3000",
-  "http://localhost:3004",
-  "https://ttyfcy-3000.csb.app",
+  "http://localhost:3001",
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    optionsSuccessStatus: 200,
-  })
-);
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  optionsSuccessStatus: 200,
+  credentials : true
+}));
 
 app.use(express.static("public"));
 

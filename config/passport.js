@@ -16,8 +16,6 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-
- // callbackURL: "/auth/google/callback",
 passport.use(
   new GoogleStrategy(
     {
@@ -50,33 +48,36 @@ passport.use(
     }
   )
 );
-console.log("Google Strategy registered successfully!");
 
 passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
     },
-    (email, password, done) => {
-      User.findOne({ email: email })
-        .then((user) => {
-          if (!user) {
-            return done(null, false, { message: "Incorrect email." });
-          }
+        (email, password, done) => {
+            User.findOne({ email: email })
+                .then(user => {
+                    // user email doesnt exist
+                    if (!user) {
+                        return done(null, false, { message: 'Incorrect email.' });
+                    }
+                    // if user password isnt stored on the db, googleAuth
+                    if (!user.password) {
+                        return done(null, false, { message: 'Please use Google login or set a password.' });
+                    }
 
-          // if verifyPassword is synchronous
-          bcrypt.compare(password, user.password, (err, isMatch) => {
-            if (err) throw err;
+                    bcrypt.compare(password, user.password, (err,isMatch) => {
+                        if (err) throw err;
 
-            if (isMatch) {
-              console.log("user logged in.");
-              return done(null, user);
-            } else {
-              return done(null, false, { message: "Password not match" });
-            }
-          });
-        })
-        .catch((err) => done(err));
-    }
-  )
+                        if (isMatch) {
+                            console.log("user logged in.");
+                            return done(null,user);
+                            
+                        } else {
+                            return done(null, false, { message : "Password not match"})
+                        }
+                    });
+                })
+                .catch(err => done(err))
+            })
 );

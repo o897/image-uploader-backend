@@ -2,35 +2,6 @@ require('dotenv').config();
 const User = require("../model/userModel")
 const bcrypt = require("bcryptjs");
 
-// exports.registerUser = async (req, res) => {
-//   try {const mongoose = require('../config/mongoose')
-
-//     const { email, password } = req.body;
-
-//     // validate inputs
-//     if (!email || !password) {
-//       return res.status(400).json({ message: "All fields are required" });
-//     }
-
-//     // check if user exists
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return res.status(400).json({ message: "Email already in use." });
-//     }
-
-//     // save new user
-//     const newUser = new User({ email, password });
-//     newUser.save();
-
-//     res.status(201).json(newUser);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
-
-// ... other imports
-
 exports.registerUser = (req, res) => {
     // Get the data from the request body
     const { firstName, lastName, email, password } = req.body;
@@ -49,6 +20,7 @@ exports.registerUser = (req, res) => {
                 firstName,
                 lastName,
                 email: trimmedEmail, //trimmed mail
+                password
             });
 
             // Hash password and save user...
@@ -85,11 +57,9 @@ exports.loginUser = async (req,res) => {
     // find the records on the db
     const user = await User.findOne({email,password});
     } catch (err) {
-        console.log("use does not exist",err);
+        console.log("user does not exist",err);
+        res.status(500).json({ success: false, message: "Server error" });
     }
-
-    // res.json({message : "logged in"})
-    res.redirect(process.env.HOME_URL);
 };
 
 exports.home = (req,res) => {
