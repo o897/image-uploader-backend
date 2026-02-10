@@ -21,14 +21,16 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://image-uploader-backend-yzqj.onrender.com/auth/google/callback",
-      proxy: true ,
+      callbackURL:
+        "https://image-uploader-backend-yzqj.onrender.com/auth/google/callback",
+      proxy: true,
     },
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ email: profile.emails[0].value }).then((currentUser) => {
         if (currentUser) {
           // user exists
           console.log(`user is : ${currentUser}`);
+          res.redirect("https://image-uploader-frontend-agg6.onrender.com/");
           done(null, currentUser);
         } else {
           // user does not exists
@@ -41,6 +43,9 @@ passport.use(
             .save()
             .then((newUser) => {
               console.log(`new user created : ${newUser}`);
+              res.redirect(
+                "https://image-uploader-frontend-agg6.onrender.com/"
+              );
               done(null, newUser);
             });
         }
@@ -54,30 +59,32 @@ passport.use(
     {
       usernameField: "email",
     },
-        (email, password, done) => {
-            User.findOne({ email: email })
-                .then(user => {
-                    // user email doesnt exist
-                    if (!user) {
-                        return done(null, false, { message: 'Incorrect email.' });
-                    }
-                    // if user password isnt stored on the db, googleAuth
-                    if (!user.password) {
-                        return done(null, false, { message: 'Please use Google login or set a password.' });
-                    }
+    (email, password, done) => {
+      User.findOne({ email: email })
+        .then((user) => {
+          // user email doesnt exist
+          if (!user) {
+            return done(null, false, { message: "Incorrect email." });
+          }
+          // if user password isnt stored on the db, googleAuth
+          if (!user.password) {
+            return done(null, false, {
+              message: "Please use Google login or set a password.",
+            });
+          }
 
-                    bcrypt.compare(password, user.password, (err,isMatch) => {
-                        if (err) throw err;
+          bcrypt.compare(password, user.password, (err, isMatch) => {
+            if (err) throw err;
 
-                        if (isMatch) {
-                            console.log("user logged in.");
-                            return done(null,user);
-                            
-                        } else {
-                            return done(null, false, { message : "Password not match"})
-                        }
-                    });
-                })
-                .catch(err => done(err))
-            })
+            if (isMatch) {
+              console.log("user logged in.");
+              return done(null, user);
+            } else {
+              return done(null, false, { message: "Password not match" });
+            }
+          });
+        })
+        .catch((err) => done(err));
+    }
+  )
 );
