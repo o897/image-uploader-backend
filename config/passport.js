@@ -30,9 +30,6 @@ passport.use(
         if (currentUser) {
           // user exists
           console.log(`user is : ${currentUser}`);
-          res.redirect(
-            "https://image-uploader-frontend-agg6.onrender.com/profile"
-          );
           done(null, currentUser);
         } else {
           // user does not exists
@@ -45,9 +42,6 @@ passport.use(
             .save()
             .then((newUser) => {
               console.log(`new user created : ${newUser}`);
-              res.redirect(
-                "https://image-uploader-frontend-agg6.onrender.com/profile"
-              );
               done(null, newUser);
             });
         }
