@@ -21,8 +21,7 @@ router.get("/success", (req, res) => {
     });
   }
 }),
-
-router.post('/register', authController.registerUser);
+  router.post("/register", authController.registerUser);
 // router.post("/creds", authController.registerUser);
 
 router.get("/failed", (req, res) => {
@@ -57,21 +56,11 @@ router.get(
   })
 );
 
-<<<<<<< HEAD
-// normal register email + password
-router.post("/", authController.registerUser);
-
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
     if (!user)
       return res.status(401).json({ success: false, message: info.message });
-=======
-router.post('/login', (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-        if (err) return next(err);
-        if (!user) return res.status(401).json({ success: false, message: info.message });
->>>>>>> cec0681 (last update nothing broken)
 
     // uses passport to store user in the session
     req.login(user, (err) => {
