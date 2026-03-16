@@ -10,11 +10,10 @@ const web = require("./routes/web");
 require("./config/passport");
 
 const allowedOrigins = [
-  "https://inquisitive-chimera-40f663.netlify.app",
   "https://image-uploader-frontend-agg6.onrender.com",
-  "https://darling-ganache-c749ed.netlify.app",
   "http://localhost:3000",
   "http://localhost:3001",
+  "https://imguploader.fun"
 ];
 
 app.set("trust proxy", 1);
