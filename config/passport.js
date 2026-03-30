@@ -22,7 +22,7 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL:
-        "https://image-uploader-backend-yzqj.onrender.com/auth/google/callback",
+        "https://oraserver.online/auth/google/callback",
       proxy: true,
     },
     (accessToken, refreshToken, profile, done) => {
