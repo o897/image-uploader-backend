@@ -10,6 +10,7 @@ const ImageSchema = new mongoose.Schema({
   imageTitle: String, //if not set take extract the title from pexels
   imageDescription: String, //if not set take extract the title from pexels
   likes: Number,
+  category : String,
   createdAt: {
     type: Date,
     default: createdAt,

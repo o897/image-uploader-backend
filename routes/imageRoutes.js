@@ -23,12 +23,13 @@ router.get("/api/:image", async (req, res) => {
     : res.json({ error: "Image not found" });
 });
 
-router.post("/upload/:name?", fileUpload.single("file"), async (req, res) => {
+router.post("/upload/:category?", fileUpload.single("file"), async (req, res) => {
   try {
     // check to see the request has a file attached to it.
     if (!req.file) return res.status(400).json({ error: "No file" });
 
     const fileName = req.file.originalname;
+    const categoryName = req.params.category;
 
     const streamUpload = (req) => {
       return new Promise((resolve, reject) => {
@@ -50,7 +51,7 @@ router.post("/upload/:name?", fileUpload.single("file"), async (req, res) => {
     let result = await streamUpload(req);
 
     let { secure_url } = result;
-    const newImage = new imageModel({ url: secure_url, filename: fileName });
+    const newImage = new imageModel({ url: secure_url, filename: fileName, category : categoryName });
     await newImage.save();
 
     return res.status(200).json({
