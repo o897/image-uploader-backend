@@ -10,10 +10,9 @@ const web = require("./routes/web");
 require("./config/passport");
 
 const allowedOrigins = [
-  // "https://image-uploader-frontend-agg6.onrender.com",
+  "https://imguploader.fun",
   "http://localhost:3000",
-  "http://localhost:3001",
-  "https://imguploader.fun"
+  "http://localhost:3001"
 ];
 
 app.set("trust proxy", 1);
