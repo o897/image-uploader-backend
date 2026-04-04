@@ -1,6 +1,7 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const LocalStrategy = require("passport-local").Strategy; // 1. Import LocalStrategy
+const LocalStrategy = require("passport-local").Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const bcrypt = require("bcryptjs");
 const User = require("../model/userModel");
 require("dotenv").config();
@@ -84,3 +85,42 @@ passport.use(
     }
   )
 );
+
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: process.env.FACEBOOK_API_ID,
+      clientSecret: process.env.FACEBOOK_APP_SECRET,
+      callbackURL: "https://oraserver.online/auth/facebook/callback",
+      profileFields: ['id', 'displayName', 'name', 'photos', 'email'] // Added 'name' for first/last name
+    },
+    async function (accessToken, refreshToken, profile, done) {
+
+      try {
+        const userEmail = profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null;
+
+        let currentUser = await User.findOne({ facebookId: profile.id });
+
+        if (currentUser) {
+          console.log(`user already exist : ${currentUser.displayName}`);
+          done(null, currentUser);
+        } else {
+          const newUser = await new User({
+            facebookId: profile.id,
+            firstName: profile.name.givenName,
+            lastName: profile.name.familyName,
+            email: userEmail,
+            displayName: profile.displayName
+          })
+            .save()
+            .then((newUser) => {
+              console.log(`new user created : ${newUser.displayName}`);
+              done(null, newUser);
+            });
+        }
+      } catch (err) {
+        console.error("Err in Facebook Strategy.", err);
+        return done(err, null)
+      }
+    }))

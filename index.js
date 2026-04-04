@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
+// const path = require("path");
 const app = express();
 const session = require("express-session");
 const passport = require("passport");
@@ -10,7 +10,7 @@ const web = require("./routes/web");
 require("./config/passport");
 
 const allowedOrigins = [
-  "https://image-uploader-frontend-agg6.onrender.com",
+  // "https://image-uploader-frontend-agg6.onrender.com",
   "http://localhost:3000",
   "http://localhost:3001",
   "https://imguploader.fun"
