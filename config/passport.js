@@ -90,7 +90,7 @@ passport.use(
 passport.use(
   new FacebookStrategy(
     {
-      clientID: process.env.FACEBOOK_API_ID,
+      clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
       callbackURL: "https://oraserver.online/auth/facebook/callback",
       profileFields: ['id', 'displayName', 'name', 'photos', 'email'] // Added 'name' for first/last name
