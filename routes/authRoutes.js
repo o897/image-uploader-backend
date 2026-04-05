@@ -79,7 +79,7 @@ router.post("/register", authController.registerUser);
 // router.get('/register',loginController.register)
 
 // facebook auth
-router.get("/auth/facebook", passport.authenticate("facebook"));
+router.get("/facebook", passport.authenticate("facebook"));
 router.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", { failureRedirect: "/login" }),
