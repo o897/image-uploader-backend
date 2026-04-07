@@ -81,8 +81,8 @@ router.post("/register", authController.registerUser);
 // facebook auth
 router.get("/facebook", passport.authenticate("facebook"));
 router.get(
-  "/auth/facebook/callback",
-  passport.authenticate("facebook", { failureRedirect: "/login" }),
+  "/facebook/callback",
+  passport.authenticate("facebook", { failureRedirect: "/failed" }),
   function (req, res) {
     //successful authentication, redirect to the home page
     res.redirect(process.env.CLIENT_URL);
