@@ -98,7 +98,6 @@ passport.use(
     async function (accessToken, refreshToken, profile, done) {
 
       try {
-        const userEmail = profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null;
 
         let currentUser = await User.findOne({ facebookId: profile.id });
 
@@ -110,7 +109,6 @@ passport.use(
             facebookId: profile.id,
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
-            email: userEmail,
             displayName: profile.displayName
           })
             .save()

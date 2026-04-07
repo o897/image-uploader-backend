@@ -3,9 +3,9 @@ const mongoose = require('../config/mongoose')
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
-        // required: true, its a must that a user provide the email
         unique: true,
-        lowercase: true
+        lowercase: true,
+        sparse : true //Only enforce the unique rule if the email actually exists. If the email is null, ignore the unique requirement.
     },
     password: {
         type: String, //cuase of google auth and other we dont always need the password
