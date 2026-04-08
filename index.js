@@ -10,7 +10,7 @@ const web = require("./routes/web");
 require("./config/passport");
 
 const allowedOrigins = [
-  "https://imguploader.fun",
+  "https://imguploader.fun/",
   "http://localhost:3000",
   "http://localhost:3001"
 ];
