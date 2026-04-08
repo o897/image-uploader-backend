@@ -34,8 +34,13 @@ router.get("/failed", (req, res) => {
 // When logout, redirect to client
 router.get("/logout", (req, res) => {
   req.logout(() => {
-    console.log("logging user out");
-    res.redirect(process.env.CLIENT_URL);
+    req.session.destroy(() => {
+      res.clearCookie("connect.sid", {
+        secure: true,
+        sameSite: "none",
+      });
+      res.status(200).json({ message: "Logged out" });
+    });
   });
 });
 
