@@ -16,15 +16,19 @@ const allowedOrigins = [
 ];
 
 app.set("trust proxy", 1);
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
-
-app.options("*", cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+  if (!origin || allowedOrigins.includes(origin)) {
+    callback(null, origin); 
+  } else {
+    callback(null, false); 
+  }
+},
+    optionsSuccessStatus: 200,
+    credentials: true
+  })
+);
 
 app.use(express.static("public"));
 
