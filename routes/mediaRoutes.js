@@ -3,7 +3,6 @@ const router = express.Router();
 
 
 router.get("/youtube/likes", async (req, res) => {
-   router.get("/youtube/likes", async (req, res) => {
   try {
     const token = req.user.googleAccessToken;
     console.log("token in youtube/likes",token);
