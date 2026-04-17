@@ -21,8 +21,8 @@ router.get("/success", (req, res) => {
     });
   }
 }),
-  router.post("/register", authController.registerUser);
-// router.post("/creds", authController.registerUser);
+
+router.post("/register", authController.registerUser);
 
 router.get("/failed", (req, res) => {
   res.status(401).json({
@@ -72,7 +72,7 @@ router.post("/login", (req, res, next) => {
     // uses passport to store user in the session
     req.login(user, (err) => {
       if (err) return next(err);
-      console.log(user);
+
       return res.status(200).json({
         success: true,
         message: "Login successful",

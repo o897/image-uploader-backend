@@ -8,8 +8,8 @@ const streamifier = require("streamifier");
 const imageModel = require("../model/imageModel");
 
 router.get("/test", async (req, res) => {
-  res.json({ error: "Image not found" });
   console.log(req.user);
+  res.json({ error: "Image not found" });
 });
 
 router.get("/api/upload/:filename", (req, res) => {
