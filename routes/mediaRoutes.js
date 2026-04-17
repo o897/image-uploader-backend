@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/youtube/likes", async (req,res) => {
     try {
-        const token = req.user.accessToken;
+        const token = req.user.googleAccessToken;
 
         const response = await fetch (
             "https://www.googleapis.com/youtube/v3/videos?part=snippet&myRating=like&maxResults=10",
