@@ -3,27 +3,29 @@ const router = express.Router();
 
 
 router.get("/youtube/likes", async (req, res) => {
-    try {
+   router.get("/youtube/likes", async (req, res) => {
+  try {
+    const token = req.user.googleAccessToken;
+    console.log("token in youtube/likes",token);
+    
+    const response = await fetch(
+      "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=LL",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-        const token = req.user.googleAccessToken;
-        // console.log("/youtube/likes route", req.user);
+    const data = await response.json();
 
-        const response = await fetch(
-            "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=LL",
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
+    console.log("youtube response", data);
 
-        const data = await response.json();
-        console.log("youtube response", data);
-
-        res.json(data.items);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+    res.json(data.items);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 })
 
 module.exports = router
