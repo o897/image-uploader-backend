@@ -1,34 +1,42 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-
 
 router.get("/youtube/likes", async (req, res) => {
   try {
-    console.log("likes",req.user.googleAccessToken);
-    
-    res.json({token : req.user.googleAccessToken})
+    if (!req.user || !req.user.googleAccessToken) {
+      return res.status(401).json({
+        error: "Not authenticated or missing Google token",
+      });
+    }
 
     const token = req.user.googleAccessToken;
-    console.log("token in youtube/likes",token);
-    
-    const response = await fetch(
-      "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=LL",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+
+    console.log("token in youtube/likes:", token);
+
+    const url =
+      "https://www.googleapis.com/youtube/v3/playlistItems" +
+      "?part=snippet&maxResults=10&playlistId=LL";
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     const data = await response.json();
 
-    console.log("youtube response", data);
+    if (!response.ok) {
+      console.log("YouTube API error:", data);
+      return res.status(response.status).json(data);
+    }
 
-    res.json(data.items);
+    console.log("youtube response OK");
+
+    return res.json(data.items || []);
   } catch (error) {
+    console.error("Server error:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-
-module.exports = router
+module.exports = router;
