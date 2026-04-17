@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
         type: String, //cuase of google auth and other we dont always need the password
     },
     firstName: String, //persoanl info can be provided later on
-    lastName : String
+    lastName : String,
+    googleAccessToken : String
 },
     {timestamps: true }
 )

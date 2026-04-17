@@ -29,16 +29,18 @@ passport.use(
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ email: profile.emails[0].value }).then((currentUser) => {
         if (currentUser) {
-          // user exists
-          console.log(`user is : ${currentUser}`);
-          done(null, currentUser);
+          currentUser.googleAccessToken = accessToken;    
+          currentUser.save().then(() => {  
+            done(null, currentUser);
+          })
+
         } else {
-          // user does not exists
           new User({
             googleId: profile.id,
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
             email: profile.emails[0].value,
+            googleAccessToken : accessToken
           })
             .save()
             .then((newUser) => {

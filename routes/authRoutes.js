@@ -48,7 +48,9 @@ router.get("/logout", (req, res) => {
 router.get(
   "/google",
   passport.authenticate("google", {
-    scope: ["profile", "email"],
+    scope: ["profile", "email","https://www.googleapis.com/auth/youtube.readonly"],
+    accessType : "offline",
+    prompt : "consent"
   })
 );
 
