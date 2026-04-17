@@ -16,7 +16,9 @@ router.get("/youtube/likes", async (req,res) => {
         );
 
         const data = await response.json();
-
+        console.log("token",token);
+        console.log("youtube response",data);
+        
         res.json(data.items);
     } catch (error) {
         res.status(500).json({error : error.message});
