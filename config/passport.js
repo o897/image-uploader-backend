@@ -27,28 +27,36 @@ passport.use(
       proxy: true,
     },
     (accessToken, refreshToken, profile, done) => {
-      User.findOne({ email: profile.emails[0].value }).then((currentUser) => {
-        if (currentUser) {
-          currentUser.googleAccessToken = accessToken;    
-          currentUser.save().then(() => {  
-            done(null, currentUser);
-          })
+      (async () => {
+        try {
+          User.findOne({ email: profile.emails[0].value }).then((currentUser) => {
+            if (currentUser) {
+              currentUser.googleAccessToken = accessToken;
+              currentUser.save().then(() => {
+                done(null, currentUser);
+              })
 
-        } else {
-          new User({
-            googleId: profile.id,
-            firstName: profile.name.givenName,
-            lastName: profile.name.familyName,
-            email: profile.emails[0].value,
-            googleAccessToken : accessToken
-          })
-            .save()
-            .then((newUser) => {
-              console.log(`new user created : ${newUser}`);
-              done(null, newUser);
-            });
+            } else {
+              new User({
+                googleId: profile.id,
+                firstName: profile.name.givenName,
+                lastName: profile.name.familyName,
+                email: profile.emails[0].value,
+                googleAccessToken: accessToken
+              }).save()
+              // console.log(`new user created : ${newUser}`);
+             return done(null, newUser);
+            }
+          });
+        } catch (error) {
+            console.log("Google startegy error :", err);
+            
+            return done(err,null)
         }
-      });
+      }
+
+      )
+
     }
   )
 );
@@ -61,9 +69,11 @@ passport.use(
     (email, password, done) => {
       User.findOne({ email: email })
         .then((user) => {
+          // user email doesnt exist
           if (!user) {
             return done(null, false, { message: "Incorrect email." });
           }
+          // if user password isnt stored on the db, googleAuth
           if (!user.password) {
             return done(null, false, {
               message: "Please use Google login or set a password.",
@@ -85,7 +95,6 @@ passport.use(
     }
   )
 );
-
 
 passport.use(
   new FacebookStrategy(
@@ -110,12 +119,9 @@ passport.use(
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
             displayName: profile.displayName
-          })
-            .save()
-            .then((newUser) => {
-              console.log(`new user created : ${newUser.displayName}`);
-              done(null, newUser);
-            });
+          }).save()
+          // console.log(`new user created : ${newUser.displayName}`);
+          done(null, newUser);
         }
       } catch (err) {
         console.error("Err in Facebook Strategy.", err);
