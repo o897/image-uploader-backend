@@ -5,7 +5,7 @@ router.get("/youtube/likes", async (req, res) => {
   try {
     if (!req.user || !req.user.googleAccessToken) {
       return res.status(401).json({
-        error: "Not authenticated or missing Google token",
+        error: "Not authenticated",
       });
     }
 
