@@ -4,7 +4,8 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         unique: true,
-        sparse: true
+        sparse: true, 
+        lowercase: true
     },
     password: {
         type: String, //cuase of google auth and others we dont always need the password
@@ -15,7 +16,6 @@ const userSchema = new mongoose.Schema({
 },
     { timestamps: true }
 )
-
 
 const User = mongoose.model('user', userSchema);
 module.exports = User

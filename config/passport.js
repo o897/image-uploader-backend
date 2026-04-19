@@ -45,13 +45,13 @@ passport.use(
                 googleAccessToken: accessToken
               }).save()
               // console.log(`new user created : ${newUser}`);
-             return done(null, newUser);
+              return done(null, newUser);
             }
           });
         } catch (error) {
-            console.log("Google startegy error :", err);
-            
-            return done(err,null)
+          console.log("Google startegy error :", err);
+
+          return done(err, null)
         }
       }
 
@@ -118,9 +118,9 @@ passport.use(
             facebookId: profile.id,
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
-            displayName: profile.displayName
+            displayName: profile.displayName,
+            email: profile.emails?.[0]?.value
           }).save()
-          // console.log(`new user created : ${newUser.displayName}`);
           done(null, newUser);
         }
       } catch (err) {
