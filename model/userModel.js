@@ -1,6 +1,7 @@
 const mongoose = require('../config/mongoose')
 
 const userSchema = new mongoose.Schema({
+    facebookId : String,
     email: {
         type: String,
         unique: true,

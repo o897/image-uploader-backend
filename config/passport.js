@@ -112,7 +112,7 @@ passport.use(
 
         if (currentUser) {
           console.log(`user already exist : ${currentUser.displayName}`);
-          done(null, currentUser);
+         return done(null, currentUser);
         } else {
           const newUser = await new User({
             facebookId: profile.id,
@@ -121,7 +121,7 @@ passport.use(
             displayName: profile.displayName,
             email: profile.emails?.[0]?.value
           }).save()
-          done(null, newUser);
+          return done(null, newUser);
         }
       } catch (err) {
         console.error("Err in Facebook Strategy.", err);
