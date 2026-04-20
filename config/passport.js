@@ -26,36 +26,33 @@ passport.use(
         "https://oraserver.online/auth/google/callback",
       proxy: true,
     },
-    (accessToken, refreshToken, profile, done) => {
-      (async () => {
+    async (accessToken, refreshToken, profile, done) => {
+    
         try {
-          User.findOne({ email: profile.emails[0].value }).then((currentUser) => {
+          const email = profile.emails[0].value ;
+          const currentUser = await User.findOne({ email : email});
             if (currentUser) {
               currentUser.googleAccessToken = accessToken;
-              currentUser.save().then(() => {
-                done(null, currentUser);
-              })
-
+              currentUser.save();
+                return done(null, currentUser);    
             } else {
-              new User({
+              const newUser = await new User({
                 googleId: profile.id,
                 firstName: profile.name.givenName,
                 lastName: profile.name.familyName,
-                email: profile.emails[0].value,
+                email: email,
                 googleAccessToken: accessToken
               }).save()
-              // console.log(`new user created : ${newUser}`);
               return done(null, newUser);
             }
-          });
+        
         } catch (error) {
           console.log("Google startegy error :", err);
-
           return done(err, null)
         }
-      }
+      
 
-      )
+      
 
     }
   )
