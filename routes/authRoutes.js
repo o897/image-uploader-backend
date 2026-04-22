@@ -6,7 +6,6 @@ const authController = require("../controller/authController");
 const User = require("../model/userModel");
 
 // login users and registering users
-
 router.get("/success", (req, res) => {
   if (req.user) {
     //request the user object
@@ -16,7 +15,7 @@ router.get("/success", (req, res) => {
       user: req.user,
     });
 
-    console.log(req.user._id);
+    console.log("success route", req.user._id);
     
   } else {
     res.status(500).json({

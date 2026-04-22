@@ -44,8 +44,8 @@ router.get("/image/me", async (req, res) => {
 
 router.post("/upload/:category?", fileUpload.single("file"), async (req, res) => {
 
-  return console.log(req.user)
   try {
+    console.log("upload route : ",req.user)
     // check to see the request has a file attached to it.
     if (!req.file) return res.status(400).json({ error: "No file" });
 
@@ -68,10 +68,11 @@ router.post("/upload/:category?", fileUpload.single("file"), async (req, res) =>
 
     // the results of how our upload went, and if its ready
     let result = await streamUpload(req);
-
+    
     let { secure_url } = result;
-    const newImage = new imageModel({ url: secure_url, filename: fileName, category: categoryName, owner : req.user._id });
+    const newImage = new imageModel({ url: secure_url, filename: fileName, owner : req.user._id });
     await newImage.save();
+
 
     return res.status(200).json({
       success: true,
