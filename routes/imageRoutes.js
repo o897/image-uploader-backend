@@ -28,7 +28,8 @@ router.get("/image/me", async (req, res) => {
 
 
   try {
-    const images = await imageModel.find({id : req.user._id});
+    
+    const images = await imageModel.find({owner : req.user._id});
 
     if (images.length === 0) {
       return res.status(404).json({message : "No images found"})
@@ -42,6 +43,8 @@ router.get("/image/me", async (req, res) => {
 })
 
 router.post("/upload/:category?", fileUpload.single("file"), async (req, res) => {
+
+  return console.log(req.user)
   try {
     // check to see the request has a file attached to it.
     if (!req.file) return res.status(400).json({ error: "No file" });
