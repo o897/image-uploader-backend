@@ -15,6 +15,9 @@ router.get("/success", (req, res) => {
       message: "successful",
       user: req.user,
     });
+
+    console.log(req.user._id);
+    
   } else {
     res.status(500).json({
       message: "no such user",
