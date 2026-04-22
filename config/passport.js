@@ -34,7 +34,7 @@ passport.use(
             if (currentUser) {
               currentUser.googleAccessToken = accessToken;
               currentUser.save();
-                return done(null, currentUser);    
+              return done(null, currentUser);    
             } else {
               const newUser = await new User({
                 googleId: profile.id,

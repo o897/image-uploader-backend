@@ -11,8 +11,6 @@ router.get("/youtube/likes", async (req, res) => {
 
     const token = req.user.googleAccessToken;
 
-    console.log("token in youtube/likes:", token);
-
     const url =
       "https://www.googleapis.com/youtube/v3/playlistItems" +
       "?part=snippet&maxResults=10&playlistId=LL";
@@ -26,12 +24,8 @@ router.get("/youtube/likes", async (req, res) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.log("YouTube API error:", data);
       return res.status(response.status).json(data);
     }
-
-    console.log("youtube response OK");
-
     return res.json(data.items || []);
   } catch (error) {
     console.error("Server error:", error);

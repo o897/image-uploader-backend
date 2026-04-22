@@ -24,6 +24,23 @@ router.get("/api/:image", async (req, res) => {
     : res.json({ error: "Image not found" });
 });
 
+router.get("/image/me", async (req, res) => {
+
+
+  try {
+    const images = await imageModel.find({id : req.user._id});
+
+    if (images.length === 0) {
+      return res.status(404).json({message : "No images found"})
+    }
+    const results = images
+      ? res.json(images) : res.json({ message : 'none' });
+  } catch (error) {
+      console.log(error);
+  }
+
+})
+
 router.post("/upload/:category?", fileUpload.single("file"), async (req, res) => {
   try {
     // check to see the request has a file attached to it.
@@ -45,14 +62,12 @@ router.post("/upload/:category?", fileUpload.single("file"), async (req, res) =>
       });
     };
 
-    const currentTime = new Date();
-    // const timeString = currentTime.toLocaleTimeString();
-    
+
     // the results of how our upload went, and if its ready
     let result = await streamUpload(req);
 
     let { secure_url } = result;
-    const newImage = new imageModel({ url: secure_url, filename: fileName, category : categoryName });
+    const newImage = new imageModel({ url: secure_url, filename: fileName, category: categoryName, owner : req.user._id });
     await newImage.save();
 
     return res.status(200).json({
