@@ -24,8 +24,7 @@ router.get("/api/:image", async (req, res) => {
     : res.json({ error: "Image not found" });
 });
 
-router.get("/image/me", async (req, res) => {
-
+router.get("/mine", async (req, res) => {
 
   try {
     
@@ -34,8 +33,9 @@ router.get("/image/me", async (req, res) => {
     if (images.length === 0) {
       return res.status(404).json({message : "No images found"})
     }
-    const results = images
-      ? res.json(images) : res.json({ message : 'none' });
+    const results = images;
+    return res.json(results)
+     
   } catch (error) {
       console.log(error);
   }
@@ -43,9 +43,9 @@ router.get("/image/me", async (req, res) => {
 })
 
 router.post("/upload/:category?", fileUpload.single("file"), async (req, res) => {
+  console.log(`user`, req.user._id)
 
   try {
-    console.log("upload route : ",req.user)
     // check to see the request has a file attached to it.
     if (!req.file) return res.status(400).json({ error: "No file" });
 
