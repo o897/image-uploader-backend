@@ -17,6 +17,7 @@ router.get("/api/upload/:filename", (req, res) => {
   res.sendFile(filePath);
 });
 
+// fetches one image
 router.get("/api/:image", async (req, res) => {
   const findImage = await imageModel.findOne({ filename: req.params.image });
   const results = findImage
@@ -24,6 +25,7 @@ router.get("/api/:image", async (req, res) => {
     : res.json({ error: "Image not found" });
 });
 
+// fetches user images
 router.get("/mine", async (req, res) => {
 
   try {
@@ -43,8 +45,7 @@ router.get("/mine", async (req, res) => {
 })
 
 router.post("/upload/:category?", fileUpload.single("file"), async (req, res) => {
-  console.log(`user`, req.user._id)
-
+  // console.log(`user`, req.user._id)
   try {
     // check to see the request has a file attached to it.
     if (!req.file) return res.status(400).json({ error: "No file" });
@@ -72,7 +73,6 @@ router.post("/upload/:category?", fileUpload.single("file"), async (req, res) =>
     let { secure_url } = result;
     const newImage = new imageModel({ url: secure_url, filename: fileName, owner : req.user._id });
     await newImage.save();
-
 
     return res.status(200).json({
       success: true,
