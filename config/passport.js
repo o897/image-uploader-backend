@@ -32,6 +32,7 @@ passport.use(
           const email = profile.emails[0].value ;
           const currentUser = await User.findOne({ email : email});
             if (currentUser) {
+              currentUser.photo = profile.photos[0].value;
               currentUser.googleAccessToken = accessToken;
               currentUser.save();
               return done(null, currentUser);    
@@ -41,13 +42,14 @@ passport.use(
                 firstName: profile.name.givenName,
                 lastName: profile.name.familyName,
                 email: email,
-                googleAccessToken: accessToken
+                googleAccessToken: accessToken,
+                photo : profile.photos[0].value
               }).save()
               return done(null, newUser);
             }
         
         } catch (error) {
-          console.log("Google startegy error :", err);
+          console.log("Google startegy error :", error);
           return done(err, null)
         }
       

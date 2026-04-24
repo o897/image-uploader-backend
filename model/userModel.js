@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
         sparse: true, 
         lowercase: true
     },
+    photo : String,
     bio : {
         type : String,
     },
