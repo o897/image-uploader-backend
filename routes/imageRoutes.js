@@ -25,7 +25,7 @@ router.get("/all", async (req,res) => {
 // fetches one image
 router.get("/api/:image", async (req, res) => {
   // const filename = req.params.image).trim();
-  const findImage = await imageModel.findOne({id : req.params.image});
+  const findImage = await imageModel.findById(req.params.image);
   const results = findImage
     ? res.json(findImage)
     : res.status(404).json({ error: "Image not found" });
