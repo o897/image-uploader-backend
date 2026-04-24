@@ -17,6 +17,11 @@ router.get("/api/upload/:filename", (req, res) => {
   res.sendFile(filePath);
 });
 
+router.get("/all", async (req,res) => {
+  const allImages = await imageModel.find();
+  const results = allImages ? res.json(allImages) : res.json({message : "Not found"})
+})
+
 // fetches one image
 router.get("/api/:image", async (req, res) => {
   const findImage = await imageModel.findOne({ filename: req.params.image });
@@ -25,7 +30,7 @@ router.get("/api/:image", async (req, res) => {
     : res.json({ error: "Image not found" });
 });
 
-// fetches user images
+// fetches users images
 router.get("/mine", async (req, res) => {
 
   try {

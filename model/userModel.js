@@ -8,6 +8,9 @@ const userSchema = new mongoose.Schema({
         sparse: true, 
         lowercase: true
     },
+    bio : {
+        type : String,
+    },
     password: {
         type: String, //cuase of google auth and others we dont always need the password
     },

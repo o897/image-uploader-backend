@@ -13,10 +13,7 @@ router.get("/success", (req, res) => {
       success: true,
       message: "successful",
       user: req.user,
-    });
-
-    console.log("success route", req.user._id);
-    
+    });    
   } else {
     res.status(500).json({
       message: "no such user",
