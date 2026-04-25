@@ -50,6 +50,18 @@ router.get("/mine", async (req, res) => {
 
 })
 
+
+// get all the images that were liked
+router.get("/liked", async (req,res) => {
+  const likes = new imageModel({id : id, likedBy : req.user._id, numLikes : likeNum});
+  await likes.save();
+  
+  const response = likes.status(200).json({liked : likes})
+
+
+})
+
+
 router.post("/upload/:category?", fileUpload.single("file"), async (req, res) => {
   // console.log(`user`, req.user._id)
   try {

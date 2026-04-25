@@ -57,9 +57,11 @@ exports.loginUser = async (req,res) => {
     // find the records on the db
     const user = await User.findOne({email,password});
     } catch (err) {
-        console.log("user does not exist",err);
-        res.status(500).json({ success: false, message: "Server error" });
+        console.log("use does not exist",err);
     }
+
+    // res.json({message : "logged in"})
+    res.redirect(process.env.HOME_URL);
 };
 
 exports.home = (req,res) => {

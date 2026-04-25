@@ -30,6 +30,8 @@ router.get("/failed", (req, res) => {
   });
 });
 
+
+
 // When logout, redirect to client
 router.get("/logout", (req, res) => {
   req.logout(() => {
