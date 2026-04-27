@@ -1,29 +1,4 @@
-// const mongoose = require("../config/mongoose");
-
-// const date = new Date("UTC+2"); // Set timezone to UTC+2 (South African time)
-// const createdAt = date.toISOString();
-
-// const ImageSchema = new mongoose.Schema({
-//   url: String,
-//   filename: String,
-//   platform : String,
-//   thumbnail : String,
-//   owner: String, // who uploaded the image
-//   imageTitle: String, //if not set take extract the title from pexels
-//   imageDescription: String, //if not set take extract the title from pexels
-//   likes: Number, //hashtags
-//   category : String,
-//   createdAt: {
-//     type: Date,
-//     default: createdAt,
-//   },
-// });
-
-// // Collection name
-// const imageModel = mongoose.model("image", ImageSchema);
-
-// module.exports = imageModel;
-
+// when creating a new image
 const mongoose = require("../config/mongoose");
 
 const ImageSchema = new mongoose.Schema(
@@ -66,7 +41,10 @@ const ImageSchema = new mongoose.Schema(
         ref: "user",
       },
     ],
-
+    numLikes : {
+      type : Number,
+    },
+    // to be added
     category: {
       type: String,
       index: true,

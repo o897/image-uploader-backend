@@ -8,10 +8,11 @@ const userSchema = new mongoose.Schema({
         sparse: true, 
         lowercase: true
     },
+    uname : String,
     photo : String,
-    bio : {
-        type : String,
-    },
+    about : String,
+    fckname : String,
+    privacy : String,
     password: {
         type: String, //cuase of google auth and others we dont always need the password
     },

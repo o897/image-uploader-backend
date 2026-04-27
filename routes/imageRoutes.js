@@ -17,9 +17,9 @@ router.get("/api/upload/:filename", (req, res) => {
   res.sendFile(filePath);
 });
 
-router.get("/all", async (req,res) => {
+router.get("/all", async (req, res) => {
   const allImages = await imageModel.find();
-  const results = allImages ? res.json(allImages) : res.json({message : "Not found"})
+  const results = allImages ? res.json(allImages) : res.json({ message: "Not found" })
 })
 
 // fetches one image
@@ -35,29 +35,39 @@ router.get("/api/:image", async (req, res) => {
 router.get("/mine", async (req, res) => {
 
   try {
-    
-    const images = await imageModel.find({owner : req.user._id});
+
+    const images = await imageModel.find({ owner: req.user._id });
 
     if (images.length === 0) {
-      return res.status(404).json({message : "No images found"})
+      return res.status(404).json({ message: "No images found" })
     }
     const results = images;
     return res.json(results)
-     
+
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
 
 })
 
 
-// get all the images that were liked
-router.get("/liked", async (req,res) => {
-  const likes = new imageModel({id : id, likedBy : req.user._id, numLikes : likeNum});
-  await likes.save();
-  
-  const response = likes.status(200).json({liked : likes})
+// pexels images 
+// For now save the image the user liked, we saving only a single image, //large image
+router.post("/liked/:photoId", async (req, res) => {
+  // collection id
+  const photoId = req.params.photoId;
+  const existingPhoto = await likedModel.findOne({ user: req.user._id, photoId : photoId });
 
+  // if user has liked image
+  if (existingPhoto) {
+    // remove from our favourites
+    await likedModel.findByIdAndDelete(existingPhoto._id);
+    return res.status(200).json({like : false})
+  }
+
+  await likedModel.create({ user: req.user._id, photoId})
+
+  return res.status(200).json({ like: true });
 
 })
 
@@ -87,9 +97,9 @@ router.post("/upload/:category?", fileUpload.single("file"), async (req, res) =>
 
     // the results of how our upload went, and if its ready
     let result = await streamUpload(req);
-    
+
     let { secure_url } = result;
-    const newImage = new imageModel({ url: secure_url, filename: fileName, owner : req.user._id });
+    const newImage = new imageModel({ url: secure_url, filename: fileName, owner: req.user._id });
     await newImage.save();
 
     return res.status(200).json({
