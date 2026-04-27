@@ -1,9 +1,13 @@
 const mongoose = require("../config/mongoose")
 
 const likedSchema = new mongoose.Schema({
+    user : {
+        ref : "User",
+        type : mongoose.type.ObjectId,
+        required : true
+    },
     photoId: mongoose.Schema.Types.ObjectId,
-    photoUrl: String,
-    numLikes : Number,
+    photoUrl: String
 },
     { timestamps: true }
 )
