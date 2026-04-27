@@ -53,7 +53,7 @@ router.get("/mine", async (req, res) => {
 
 // pexels images 
 // For now save the image the user liked, we saving only a single image, //large image
-router.post("/liked/:photoId", async (req, res) => {
+router.post("/like/:photoId", async (req, res) => {
   // collection id
   const photoId = req.params.photoId;
   const existingPhoto = await likedModel.findOne({ user: req.user._id, photoId : photoId });
