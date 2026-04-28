@@ -4,7 +4,7 @@ const router = express.Router();
 const fileUpload = require("../middleware/multer");
 const cloudinary = require("../utils/cloudinary");
 const streamifier = require("streamifier");
-
+const likedModel = require("../model/likedModel")
 const imageModel = require("../model/imageModel");
 
 router.get("/test", async (req, res) => {
@@ -56,6 +56,7 @@ router.get("/mine", async (req, res) => {
 router.post("/like/:photoId", async (req, res) => {
   // collection id
   const photoId = req.params.photoId;
+  console.log("our backend ", photoId)
   const existingPhoto = await likedModel.findOne({ user: req.user._id, photoId : photoId });
 
   // if user has liked image

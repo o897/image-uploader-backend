@@ -2,16 +2,19 @@ const mongoose = require("../config/mongoose")
 
 const likedSchema = new mongoose.Schema({
     user : {
-        ref : "User",
-        type : mongoose.type.ObjectId,
+        ref : "user",
+        type : mongoose.Schema.Types.ObjectId,
         required : true
     },
-    photoId: mongoose.Schema.Types.ObjectId,
+    photoId : {
+        type : String,
+        required : true
+    },
     photoUrl: String
 },
     { timestamps: true }
 )
 
-const likedImage = mongoose.model("like", likedSchema)
+const Like = mongoose.model("like", likedSchema)
 
-module.exports = likedImage 
+module.exports = Like
