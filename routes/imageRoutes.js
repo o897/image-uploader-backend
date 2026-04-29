@@ -74,9 +74,10 @@ router.get("/likes/me", async (req,res) => {
 
   const likedImages = await likedModel.find();
 
-  res.status(200).json({imageIds : likedImages.imageIds})
+  res.status(200).json({imageIds : likedImages.photoId})
 
 })
+
 
 
 router.post("/upload/:category?", fileUpload.single("file"), async (req, res) => {
