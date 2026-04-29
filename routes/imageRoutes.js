@@ -70,6 +70,14 @@ router.post("/like/:photoId", async (req, res) => {
 
 })
 
+router.get("/likes/me", async (req,res) => {
+
+  const likedImages = await likedModel.find();
+
+  res.status(200).json({imageIds : likedImages.imageIds})
+
+})
+
 
 router.post("/upload/:category?", fileUpload.single("file"), async (req, res) => {
   // console.log(`user`, req.user._id)
