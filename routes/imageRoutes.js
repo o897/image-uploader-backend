@@ -73,8 +73,13 @@ router.post("/like/:photoId", async (req, res) => {
 })
 
 router.get("/likes/me", async (req,res) => {
+  
   console.log("likes model");
+
   const likedImages = await likedModel.find();
+  // if (!req.user) {
+  //   return res.json({})
+  // }
 
   if (!likedImages) {
     res.status(400).json({message : "No image found"})
