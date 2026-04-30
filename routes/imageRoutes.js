@@ -55,6 +55,8 @@ router.get("/mine", async (req, res) => {
 // For now save the image the user liked, we saving only a single image, //large image
 router.post("/like/:photoId", async (req, res) => {
   const photoId = req.params.photoId;
+
+
   const existingPhoto = await likedModel.findOne({ user: req.user._id, photoId : photoId });
 
   // if user has liked image
@@ -71,10 +73,13 @@ router.post("/like/:photoId", async (req, res) => {
 })
 
 router.get("/likes/me", async (req,res) => {
-
+  console.log("likes model");
   const likedImages = await likedModel.find();
 
-  res.status(200).json({imageIds : likedImages.photoId})
+  if (!likedImages) {
+    res.status(400).json({message : "No image found"})
+  }
+  res.status(200).json({imageIds : likedImages})
 
 })
 
