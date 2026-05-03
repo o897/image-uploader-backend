@@ -68,7 +68,7 @@ router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
     if (!user)
-      return res.status(401).json({ success: false, message: info.message });
+      return res.status(401).json({ success: false, message: "Email doesn't exist" });
 
     // uses passport to store user in the session
     req.login(user, (err) => {
