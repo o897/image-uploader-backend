@@ -14,7 +14,6 @@ const userSchema = new mongoose.Schema({
     fcbkuname : String,
     privacy : String,
     ytb : String,
-
     password: {
         type: String, //cuase of google auth and others we dont always need the password
     },

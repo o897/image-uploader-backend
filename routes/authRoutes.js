@@ -86,7 +86,7 @@ router.post("/login", (req, res, next) => {
 router.post("/register", authController.registerUser);
 // router.get('/register',loginController.register)
 
-router.put("/register/update", async (req, res) => {
+router.put("/update", async (req, res) => {
   try {
     const { fname, lname, uname, about, ytb, fcbkuname, privacy } = req.body;
 
@@ -96,10 +96,11 @@ router.put("/register/update", async (req, res) => {
         $set: {
           firstName: fname,
           lastName: lname,
-          username: uname,
+          uname: uname,
           about: about,
-          youtube: ytb,
-          facebook: fcbkuname,
+          ytb: ytb,
+          fcbkname: fcbkuname,
+
         }
       },
       { new: true } 
