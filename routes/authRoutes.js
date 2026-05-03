@@ -83,6 +83,33 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
+router.delete("/delete", async (req,res) => {
+
+  try {
+    if(!req.user) {
+      return res.status(401).json({message : "Unauthorized"});
+    }
+
+    await User.findByIdAndDelete(req.user._id);
+
+    req.logout(() => {
+      req.session.destroy(() => {
+        res.clearCookie("connect.sid", {
+          secure: true,
+          sameSite: "none",
+        });
+        res.status(200).json({ message: "Account deleted" });
+      });
+    });
+
+
+  } catch (error) {
+
+    res.status(500).json({message : "Server error ", error : err.message})
+    
+  }
+})
+
 router.post("/register", authController.registerUser);
 // router.get('/register',loginController.register)
 
