@@ -86,12 +86,43 @@ router.post("/login", (req, res, next) => {
 router.post("/register", authController.registerUser);
 // router.get('/register',loginController.register)
 
+router.put("/register/update", async (req, res) => {
+  try {
+    const { fname, lname, uname, about, ytb, fcbkuname, privacy } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id, 
+      {
+        $set: {
+          firstName: fname,
+          lastName: lname,
+          username: uname,
+          about: about,
+          youtube: ytb,
+          facebook: fcbkuname,
+        }
+      },
+      { new: true } 
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Profile updated", user: updatedUser });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+
 // facebook auth
 router.get("/facebook", passport.authenticate("facebook", {scope : ['email']}));
 router.get("/facebook/callback", passport.authenticate("facebook", { failureRedirect: "/failed" }),
   function (req, res) {
     //successful authentication, redirect to the home page
-    res.redirect(process.env.CLIENT_URL);
+    res.redirect(process.env.PROFILE_URL);
   }
 );
 module.exports = router;
