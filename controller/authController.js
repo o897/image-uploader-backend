@@ -19,7 +19,7 @@ exports.registerUser = (req, res) => {
             const newUser = new User({
                 firstName,
                 lastName,
-                email: trimmedEmail, //trimmed mail
+                email: trimmedEmail, 
                 password
             });
 
@@ -58,7 +58,7 @@ exports.loginUser = async (req,res) => {
         console.log("use does not exist",err);
     }
 
-    res.json({message : "logged in"})
+   return res.status(200).json({message : user })
 
     // res.redirect(process.env.HOME_URL);
     
