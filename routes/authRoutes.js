@@ -4,10 +4,6 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const authController = require("../controller/authController");
 const User = require("../model/userModel");
-const fileUpload = require("../middleware/multer");
-const cloudinary = require("../utils/cloudinary");
-const streamifier = require("streamifier");
-
 
 // login users and registering users
 router.get("/success", (req, res) => {
@@ -117,37 +113,24 @@ router.delete("/delete", async (req,res) => {
 router.post("/register", authController.registerUser);
 // router.get('/register',loginController.register)
 
-router.put("/update", upload.single("photo"), async (req, res) => {
+router.put("/update", async (req, res) => {
   try {
     const { fname, lname, uname, about, ytb, fcbkuname, privacy } = req.body;
 
-    const updates = {};
-    if (fname) updates.firstName = fname;
-    if (lname) updates.lastName = lname;
-    if (uname) updates.uname = uname;
-    if (about) updates.about = about;
-    if (ytb) updates.ytb = ytb;
-    if (fcbkuname) updates.fcbkuname = fcbkuname;
-
-    if (req.file) {
-      const streamUpload = () => {
-        return new Promise((resolve, reject) => {
-          let stream = cloudinary.uploader.upload_stream((error, result) => {
-            if (result) resolve(result);
-            else reject(error);
-          });
-          streamifier.createReadStream(req.file.buffer).pipe(stream);
-        });
-      };
-
-      const result = await streamUpload();
-      updates.photo = result.secure_url; 
-    }
-
     const updatedUser = await User.findByIdAndUpdate(
-      req.user._id,
-      { $set: updates },
-      { new: true }
+      req.user._id, 
+      {
+        $set: {
+          firstName: fname,
+          lastName: lname,
+          uname: uname,
+          about: about,
+          ytb: ytb,
+          fcbkname: fcbkuname,
+
+        }
+      },
+      { new: true } 
     );
 
     if (!updatedUser) {
@@ -160,6 +143,7 @@ router.put("/update", upload.single("photo"), async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+
 
 // facebook auth
 router.get("/facebook", passport.authenticate("facebook", {scope : ['email']}));
