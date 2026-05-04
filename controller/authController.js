@@ -50,8 +50,6 @@ exports.registerUser = (req, res) => {
 exports.loginUser = async (req,res) => {
     // request the email and the password from the body    
     const {email, password} = req.body
-
-    console.log(email);
     
     try {
     // find the records on the db
@@ -60,8 +58,10 @@ exports.loginUser = async (req,res) => {
         console.log("use does not exist",err);
     }
 
-    // res.json({message : "logged in"})
-    res.redirect(process.env.HOME_URL);
+    res.json({message : "logged in"})
+
+    // res.redirect(process.env.HOME_URL);
+    
 };
 
 exports.home = (req,res) => {
