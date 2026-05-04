@@ -153,4 +153,51 @@ router.get("/facebook/callback", passport.authenticate("facebook", { failureRedi
     res.redirect(process.env.PROFILE_URL);
   }
 );
+
+router.post("/facebook/delete", async (req, res) => {
+  try {
+    const { signed_request } = req.body;
+
+    // decode the signed request from facebook
+    const payload = signed_request.split('.')[1];
+    const data = JSON.parse(Buffer.from(payload, 'base64').toString('utf8'));
+
+    const facebookId = data.user_id;
+
+    // delete user by facebookId
+    await User.findOneAndDelete({ facebookId: facebookId });
+
+    // facebook expects this specific response
+    res.json({
+      url: `https://usememoir.online/deletion-status`,
+      confirmation_code: facebookId
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+router.post("/facebook/delete", async (req, res) => {
+  try {
+    const { signed_request } = req.body;
+
+    const payload = signed_request.split('.')[1];
+    const data = JSON.parse(Buffer.from(payload, 'base64').toString('utf8'));
+
+    const facebookId = data.user_id;
+
+    await User.findOneAndDelete({ facebookId: facebookId });
+
+    res.json({
+      url: `https://usememoir.online/deletion-status`,
+      confirmation_code: facebookId
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+
 module.exports = router;
