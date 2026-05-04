@@ -4,7 +4,6 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const authController = require("../controller/authController");
 const User = require("../model/userModel");
-const fileUpload = require('../middleware/fileUpload'); // ← wherever multer is configured
 const fileUpload = require("../middleware/multer");
 const cloudinary = require("../utils/cloudinary");
 const streamifier = require("streamifier");
