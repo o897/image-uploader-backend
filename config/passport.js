@@ -102,29 +102,38 @@ passport.use(
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
       callbackURL: "https://oraserver.online/auth/facebook/callback",
-      profileFields: ['id', 'displayName', 'name', 'photos', 'email'] // Added 'name' for first/last name
+      profileFields: ['id', 'displayName', 'name', 'photos', 'email']
     },
     async function (accessToken, refreshToken, profile, done) {
-
       try {
+        const photoUrl = `https://graph.facebook.com/${profile.id}/picture?type=large&access_token=${accessToken}`;
 
         let currentUser = await User.findOne({ facebookId: profile.id });
 
         if (currentUser) {
-          console.log(`user already exist : ${currentUser.displayName}`);
-         return done(null, currentUser);
+          // update photo every login in case it changed
+          currentUser = await User.findByIdAndUpdate(
+            currentUser._id,
+            { $set: { photo: photoUrl } },
+            { new: true }
+          );
+          return done(null, currentUser);
         } else {
           const newUser = await new User({
             facebookId: profile.id,
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
             displayName: profile.displayName,
-            email: profile.emails?.[0]?.value
-          }).save()
+            email: profile.emails?.[0]?.value,
+            photo: photoUrl // ← save photo on register
+          }).save();
           return done(null, newUser);
         }
+
       } catch (err) {
         console.error("Err in Facebook Strategy.", err);
-        return done(err, null)
+        return done(err, null);
       }
-    }))
+    }
+  )
+);
