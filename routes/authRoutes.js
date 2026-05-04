@@ -4,6 +4,10 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const authController = require("../controller/authController");
 const User = require("../model/userModel");
+const fileUpload = require("../middleware/multer");
+const cloudinary = require("../utils/cloudinary");
+const streamifier = require("streamifier");
+
 
 // login users and registering users
 router.get("/success", (req, res) => {
@@ -138,6 +142,37 @@ router.put("/update", async (req, res) => {
     }
 
     res.status(200).json({ message: "Profile updated", user: updatedUser });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+
+// update user profile photo
+router.put("/update/photo", fileUpload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: "No file" });
+
+    const streamUpload = () => {
+      return new Promise((resolve, reject) => {
+        let stream = cloudinary.uploader.upload_stream((error, result) => {
+          if (result) resolve(result);
+          else reject(error);
+        });
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+      });
+    };
+
+    const result = await streamUpload();
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { $set: { photo: result.secure_url } }, // ← saves to User model
+      { new: true }
+    );
+
+    res.status(200).json({ message: "Photo updated", user: updatedUser });
 
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
