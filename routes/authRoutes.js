@@ -117,24 +117,22 @@ router.delete("/delete", async (req,res) => {
 router.post("/register", authController.registerUser);
 // router.get('/register',loginController.register)
 
-router.put("/update", async (req, res) => {
+router.put("/update", fileUpload.none(), async (req, res) => {
   try {
-    const { fname, lname, uname, about, ytb, fcbkuname, privacy } = req.body;
+    const { fname, lname, uname, about, ytb, fcbkuname } = req.body;
+
+    const updates = {};
+    if (fname) updates.firstName = fname;
+    if (lname) updates.lastName = lname;
+    if (uname) updates.uname = uname;
+    if (about) updates.about = about;
+    if (ytb) updates.ytb = ytb;
+    if (fcbkuname) updates.fcbkuname = fcbkuname;
 
     const updatedUser = await User.findByIdAndUpdate(
-      req.user._id, 
-      {
-        $set: {
-          firstName: fname,
-          lastName: lname,
-          uname: uname,
-          about: about,
-          ytb: ytb,
-          fcbkname: fcbkuname,
-
-        }
-      },
-      { new: true } 
+      req.user._id,
+      { $set: updates },
+      { new: true }
     );
 
     if (!updatedUser) {
@@ -147,7 +145,6 @@ router.put("/update", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
-
 
 // update user profile photo
 router.put("/update/photo", fileUpload.single("file"), async (req, res) => {
